@@ -47,6 +47,9 @@ async def add_process_time_header(request, call_next):
     return response
 
 
+# todo add error handler, return 422 for InputGeomertyError and InputValueError
+
+
 @app.post("/split")
 async def split_building_limits(
     gcs: Optional[str] = Query(
@@ -65,6 +68,8 @@ async def split_building_limits(
     - height_plateaus: Areas (polygons) on your site with different elevation. Expected format: GeoJSON with type FeatureCollection.
 
     """
+    # todo: refactor to compute_split_building_limits_safe
+    # add response model with the errors
     await delete_all_rows()
     async_connection = await get_connection()
     async with async_connection:  # connection will be closed after exiting
@@ -101,6 +106,8 @@ async def split_building_limits(
     logging.info(building_limits_split_json)
     return json.loads(building_limits_split_json)
 
+
+# todo add /byid, /bygeometry, /delete
 
 if __name__ == "__main__":
     uvicorn.run("app:app", port=8000, reload=True)

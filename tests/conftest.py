@@ -33,4 +33,9 @@ def vaterlandsparken_input():
 
 @pytest.fixture
 def plateaus_covering_multiple_buildings_limits():
-    pass
+    """Get data for plateaus covering multiple building limit."""
+    with open(
+        "tests/input_files/plateaus_covering_multiple_building_limits.json"
+    ) as input_file:
+        input_json = json.load(input_file)
+    return input_json

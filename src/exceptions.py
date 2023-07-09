@@ -1,0 +1,6 @@
+class InputGeometryError(Exception):
+    ...
+
+
+class InputValueError(Exception):
+    ...

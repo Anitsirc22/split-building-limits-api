@@ -4,6 +4,8 @@ from typing import Optional
 
 import geopandas as gpd
 
+from src.exceptions import InputGeometryError
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +31,6 @@ def validate_not_overlapping_polygons(gdf: gpd.GeoDataFrame, pcs: Optional[str] 
     logger.info(polygons_union_area)
 
     if abs(polygons_area - polygons_union_area) > 1e-6:
-        raise ValueError("Input polygons overlap.")
+        raise InputGeometryError("Input polygons overlap.")
 
     return

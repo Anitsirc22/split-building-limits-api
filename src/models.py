@@ -4,6 +4,8 @@ import geopandas as gpd
 
 from pydantic import BaseModel, Extra, StrictInt, confloat, validator
 
+from src.exceptions import InputGeometryError, InputValueError
+
 
 StrictFloat = confloat(strict=True, gt=float("-inf"), lt=float("inf"))
 
@@ -23,10 +25,10 @@ class GeometryModel(BaseModel):
         # For type "Polygon", the "coordinates" member must be an array of LinearRing coordinate arrays. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
         # https://rdrr.io/cran/geoops/man/Polygon.html
         if len(coordinates) != 1:
-            raise ValueError("Polygons can not contain donut holes.")
+            raise InputGeometryError("Polygons can not contain donut holes.")
         for coord in coordinates[0]:
             if len(coord) != 2:
-                raise ValueError(
+                raise InputGeometryError(
                     "Each coordinate pair should contain exactly 2 floats."
                 )
         return coordinates
@@ -62,6 +64,16 @@ class InputModel(BaseModel):
         )
         return building_limits_gdf, height_plateaus_gdf
 
+    @validator("height_plateaus")
+    def check_split_building_limits(cls, height_plateaus):
+        """Validate that height plateaus contain elevation information."""
+        for feature in height_plateaus.features:
+            if not feature.properties:
+                raise InputValueError(
+                    "The split height plateaus should contain elevation information."
+                )
+        return height_plateaus
+
 
 class OutputModel(BaseModel):
     building_limits: FeatureCollectionModel
@@ -70,7 +82,7 @@ class OutputModel(BaseModel):
 
     @validator("split_building_limits")
     def check_split_building_limits(cls, split_building_limits):
-        """Validate that the split building limits contain elevation information."""
+        """Validate that split building limits contain elevation information."""
         for feature in split_building_limits.features:
             if not feature.properties:
                 raise ValueError(

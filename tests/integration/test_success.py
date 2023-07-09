@@ -51,7 +51,7 @@ def test_vaterlandsparken(fast_api_test_client, vaterlandsparken_input):
 
 
 @pytest.mark.integration
-def test_plateaus_covering_building_limit(
+def test_post_plateaus_covering_building_limit(
     fast_api_test_client, plateaus_covering_building_limit
 ):
     response = fast_api_test_client.post(
@@ -72,3 +72,59 @@ def test_plateaus_covering_building_limit(
     assert response_json["features"][1]["geometry"]["coordinates"] == [
         [[5.0, 0.0], [5.0, 10.0], [10.0, 10.0], [10.0, 0.0], [5.0, 0.0]]
     ]
+    # todo: delete created row
+
+
+@pytest.mark.integration
+def test_post_plateaus_covering_multiple_buildings_limits(
+    fast_api_test_client, plateaus_covering_multiple_buildings_limits
+):
+    response = fast_api_test_client.post(
+        "/split", json=plateaus_covering_multiple_buildings_limits
+    )
+
+    assert response.status_code == 200
+
+    response_json = response.json()
+
+    assert len(response_json["features"]) == 3
+    assert response_json["features"][0]["properties"]["elevation"] == 3.63
+    assert response_json["features"][1]["properties"]["elevation"] == 4.63
+    assert response_json["features"][2]["properties"]["elevation"] == 4.63
+
+    assert response_json["features"][0]["geometry"]["coordinates"] == [
+        [[0.0, 0.0], [0.0, 4.0], [5.0, 4.0], [5.0, 0.0], [0.0, 0.0]]
+    ]
+    assert response_json["features"][1]["geometry"]["coordinates"] == [
+        [[5.0, 0.0], [5.0, 4.0], [10.0, 4.0], [10.0, 0.0], [5.0, 0.0]]
+    ]
+    assert response_json["features"][2]["geometry"]["coordinates"] == [
+        [[10.0, 6.0], [5.0, 6.0], [5.0, 10.0], [10.0, 10.0], [10.0, 6.0]]
+    ]
+    # todo: delete created row
+
+
+@pytest.mark.integration
+def test_post_for_existing_result():
+    # make two post call to split
+    # make sure in the last one we dont compute the result (number of rows still the same)
+
+    # make one delete call to delete the row
+    pass
+
+
+@pytest.mark.integration
+def test_get_by_id():
+    # make one post call to split
+    # make one get call to get /byid o get the persisted result
+    # make one delete call to delete the row
+    pass
+
+
+@pytest.mark.integration
+def test_get_by_geometries():
+    # make one post call to split
+    # make one post call to /bygeometries
+    # make one delete call to delete the result by id
+    # make one get call to check that the result is deleted
+    pass

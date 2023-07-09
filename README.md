@@ -27,6 +27,33 @@ poetry run uvicorn src.app:app --reload --port 4011
 
 Tests are using flask api test client, so there is no need to run the service.
 
+Make sure you have the `DB_URL` environment variable set.
+
+Run tests with:
+
 ```shell
 poetry run pytest
 ```
+
+## Build image
+
+```shell
+docker build -t split_building_limits .
+```
+
+<!-- docker run -it split_building_limits /bin/bash -->
+
+<!-- docker run -it -p 5000:5000 split_building_limits /bin/bash -->
+
+## Run the examples
+
+The examples can be found in this [jupyter notebook](examples/split_building_limits_examples.ipynb)
+
+Make sure you have the `DB_URL` environment variable set.
+
+To run the examples you can use: `poetry run jupyter notebook`.
+
+### Requirements
+
+- The `notebook` package. It is part of the dev group dependencies so it will
+automatically be installed using `poetry install`.

@@ -1,0 +1,57 @@
+{
+    "building_limits": {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [0,0],
+                            [10,0],
+                            [10,10],
+                            [0,10]
+                        ]
+                    ]
+                }
+            }
+        ]
+    },
+    "height_plateaus": {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [0,0],
+                            [5,0],
+                            [5,10],
+                            [0,10]
+                        ]
+                    ]
+                },
+                "properties": {}
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [
+                            [5,0],
+                            [10,0],
+                            [10,10],
+                            [5,10]
+                        ]
+                    ]
+                },
+                "properties": {}
+            }
+        ]
+    }
+}
