@@ -1,4 +1,8 @@
 repos:
+- repo: https://github.com/psf/black
+  rev: 23.3.0
+  hooks:
+  -   id: black
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
   hooks:
@@ -6,12 +10,12 @@ repos:
       args:
           # Keep in sync with pyproject.toml
           - --line-length=120
-          - --ignore=D100,D101,D102,D103,D104,D105,D106,E731,E501,W605,RUF002,UP006,UP007,D200,D212,D205,UP035
+          - --ignore=D100,D101,D102,D103,D104,D105,D106,E731,E501,W605,RUF002,UP006,UP007,D200,D212,D205,UP035,I001
           # See https://beta.ruff.rs/docs/rules for an overview of ruff rules
           - --select=D,E,W,F,I,T,RUF,TID,UP
           - --fixable=E,W,F,I,T,RUF,TID,UP
           - --target-version=py38
-          - --fix
+          # - --fix
   rev: v0.0.272
 
 - repo: https://github.com/igorshubovych/markdownlint-cli
@@ -32,8 +36,3 @@ repos:
     - id: end-of-file-fixer
     - id: check-ast
     - id: check-docstring-first
-
-- repo: https://github.com/psf/black
-  rev: 23.3.0
-  hooks:
-  -   id: black

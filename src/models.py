@@ -25,11 +25,14 @@ class GeometryModel(BaseModel):
         # For type "Polygon", the "coordinates" member must be an array of LinearRing coordinate arrays. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
         # https://rdrr.io/cran/geoops/man/Polygon.html
         if len(coordinates) != 1:
-            raise InputGeometryError("Polygons can not contain donut holes.")
+            raise InputGeometryError("Polygons cannot contain inner holes.")
         for coord in coordinates[0]:
-            if len(coord) != 2:
+            if (num_coord := len(coord)) not in [
+                2,
+                3,
+            ]:  # 3d coordinates are supported but are treated as 2d
                 raise InputGeometryError(
-                    "Each coordinate pair should contain exactly 2 floats."
+                    f"Coordinates provided contain {num_coord} dimensions. Only 2d or 3d geometries supported."
                 )
         return coordinates
 
@@ -70,14 +73,15 @@ class InputModel(BaseModel):
         for feature in height_plateaus.features:
             if not feature.properties:
                 raise InputValueError(
-                    "The split height plateaus should contain elevation information."
+                    "Height plateaus should contain elevation information."
                 )
         return height_plateaus
 
 
 class OutputModel(BaseModel):
-    building_limits: FeatureCollectionModel
-    height_plateaus: FeatureCollectionModel
+    id: int
+    # building_limits: FeatureCollectionModel
+    # height_plateaus: FeatureCollectionModel
     split_building_limits: FeatureCollectionModel
 
     @validator("split_building_limits")
@@ -89,3 +93,7 @@ class OutputModel(BaseModel):
                     "The split building limits should contain elevation information."
                 )
         return split_building_limits
+
+
+class ErrorMessageModel(BaseModel):
+    message: str

@@ -1,9 +1,9 @@
 {
     "building_limits": {
-        "type": "FeatureCollection",
+        "type": "Feature",
         "features": [
             {
-                "type": "Feature",
+                "type": "Error_Type",
                 "properties": {},
                 "geometry": {
                     "type": "Polygon",
@@ -11,21 +11,6 @@
                         [
                             [0,0],
                             [10,0],
-                            [10,4],
-                            [0,4]
-                        ]
-                    ]
-                }
-            },
-            {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [
-                        [
-                            [0,6],
-                            [10,6],
                             [10,10],
                             [0,10]
                         ]
@@ -40,35 +25,26 @@
             {
                 "type": "Feature",
                 "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [
-                        [
-                            [0,0],
-                            [5,0],
-                            [5,10],
-                            [0,10]
-                        ]
-                    ]
+                    "type": "Error_Type",
+                    "coordinates":[0,0]
                 },
                 "properties": {
                     "elevation": 3.63
                 }
             },
             {
-                "type": "Feature",
+                "type": "FeatureCollection",
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [
-                        [
                             [5,0],
                             [10,0],
                             [10,10],
                             [5,10]
                         ]
-                    ]
                 },
                 "properties": {
-                    "elevation": 4.63
+                    "elevation": "error"
                 }
             }
         ]

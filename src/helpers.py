@@ -31,6 +31,15 @@ def validate_not_overlapping_polygons(gdf: gpd.GeoDataFrame, pcs: Optional[str] 
     logger.info(polygons_union_area)
 
     if abs(polygons_area - polygons_union_area) > 1e-6:
-        raise InputGeometryError("Input polygons overlap.")
+        logger.error("Input polygons overlap.")
+        raise InputGeometryError("Please provide input polygons that do not overlap.")
 
-    return
+
+def validate_plateaus_fully_cover_building_limits(gdf_plateaus, gdf_building_limits):
+    plateaus_fully_cover_building_limits = gdf_plateaus.unary_union.buffer(
+        1e-6
+    ).contains(gdf_building_limits.unary_union)
+    if not plateaus_fully_cover_building_limits:
+        raise InputGeometryError(
+            "Please provide height plateaus that fully cover the building limits."
+        )
