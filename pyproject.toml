@@ -23,6 +23,7 @@ httpx = "^0.24.1"
 requests = "^2.31.0"
 pre-commit = "^3.3.3"
 shapely = "^2.0.1"
+black = "^23.7.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -47,12 +48,11 @@ line-length = 120
 # I001: Import block is un-sorted or un-formatted, conflicting with black
 ignore = ["E501", "E731", "W605","D100", "D101", "D102", "D103", "D104", "D105", "D106", "RUF002", "UP006", "UP007", "UP035", "I001"]
 target-version = "py38"
-select = ["D", "E", "W",  "F", "I", "T", "RUF", "TID", "UP"]
+select = ["E", "W",  "F", "I", "T", "RUF", "TID", "UP"]
 exclude = []
 
 [tool.ruff.pydocstyle]
 convention = "google"
-
 [tool.ruff.isort]
 lines-after-imports = 2
 lines-between-types = 1

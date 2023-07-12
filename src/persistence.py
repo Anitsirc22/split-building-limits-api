@@ -4,6 +4,7 @@ import os
 import psycopg
 
 from src.exceptions import SplitBuildingLimitsNotFoundError
+from typing import Awaitable
 
 
 logger = logging.getLogger(__name__)
@@ -15,46 +16,46 @@ CREATE_TABLE_QUERY = """
         building_limits JSONB,
         height_plateaus JSONB,
         split_building_limits JSONB
-    )
+    );
 """
 
 INSERT_ROW_QUERY = """
-    INSERT INTO split_building_limits (building_limits, height_plateaus, split_building_limits) VALUES (%s, %s, %s) RETURNING id
+    INSERT INTO split_building_limits (building_limits, height_plateaus, split_building_limits) VALUES (%s, %s, %s) RETURNING id;
 """
 
 SELECT_ROW_QUERY_BY_GEOMETRY = """
-    SELECT (id, split_building_limits) FROM split_building_limits WHERE building_limits = %s AND height_plateaus = %s
+    SELECT (id, split_building_limits) FROM split_building_limits WHERE building_limits = %s AND height_plateaus = %s;
 """
 
 SELECT_ROW_BY_ID_QUERY = """
-    SELECT (id, split_building_limits) FROM split_building_limits WHERE id = %s
+    SELECT (id, split_building_limits) FROM split_building_limits WHERE id = %s;
 """
 
 COUNT_ALL_ROWS_QUERY = """
-    SELECT COUNT(*) FROM split_building_limits
+    SELECT COUNT(*) FROM split_building_limits;
 """
 
 DELETE_ALL_ROWS_QUERY = """
-    DELETE FROM split_building_limits
+    DELETE FROM split_building_limits;
 """
 
 DELETE_BY_ID_QUERY = """
-    DELETE FROM split_building_limits WHERE id = %s
+    DELETE FROM split_building_limits WHERE id = %s;
 """
 
 url = os.environ.get("DB_URL")
 
 
-async def get_connection():
+def get_connection() -> Awaitable[psycopg.AsyncConnection]:
     """Create a connection to the database."""
-    return await psycopg.AsyncConnection.connect(url)
+    return psycopg.AsyncConnection.connect(url)
 
 
 async def write_split_building_limits_to_database(
-    async_connection,
-    building_limits_str,
-    height_plateaus_str,
-    split_building_limits_str,
+    async_connection: psycopg.AsyncConnection,
+    building_limits_str: str,
+    height_plateaus_str: str,
+    split_building_limits_str: str,
 ):
     """Write split building limits to database."""
     async with async_connection.cursor() as cursor:
@@ -73,7 +74,9 @@ async def write_split_building_limits_to_database(
 
 
 async def get_existing_split_building_limits(
-    async_connection, building_limits_str, height_plateaus_str
+    async_connection: psycopg.AsyncConnection,
+    building_limits_str: str,
+    height_plateaus_str: str,
 ) -> tuple | None:
     """Get split building limits from database."""
     try:
@@ -89,17 +92,14 @@ async def get_existing_split_building_limits(
         return None
 
 
-async def get_number_of_rows():
+def get_number_of_rows():  # sync -> only used in tests
     """Get number of rows in database."""
-    async with await psycopg.AsyncConnection.connect(url) as async_connection:
-        async with async_connection.cursor() as cursor:
-            await cursor.execute(COUNT_ALL_ROWS_QUERY)
-            row = await cursor.fetchone()
+    with psycopg.Connection.connect(url) as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(COUNT_ALL_ROWS_QUERY)
+            row = cursor.fetchone()
             logger.info("Number of rows in database retrieved.")
     return row[0] if row else 0
-
-
-# elephantsql: SELECT height_plateaus ->> 'features' AS height_plateaus FROM split_building_limits
 
 
 async def delete_all_rows():

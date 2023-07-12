@@ -12,12 +12,29 @@ from src.persistence import (
     write_split_building_limits_to_database,
 )
 
+from src.models import InputModel
+
 
 logger = logging.getLogger(__name__)
 
 
-async def split_and_persist_building_limits_unsafe(input_data, gcs, pcs):
-    # await delete_all_rows() # todo remove after local testing
+async def split_and_persist_building_limits_unsafe(
+    input_data: InputModel, gcs: str, pcs: str
+):
+    """
+    Split building limits and persist them to database.
+
+    Args:
+        input_data (InputModel): Input data containing building limits and height plateaus.
+        gcs (str): The GCS (Geographic Coordinate System) of the input data.
+            For example: EPSG:4326.
+        pcs (str): The PCS (Projected Coordinate System) of the input data.
+            For example: EPSG:3857.
+
+    Returns:
+        OutputModel: Output data containing the id of the split building limits and the split building limits geojson.
+
+    """
     async_connection = await get_connection()
 
     async with async_connection:  # connection will be closed after exiting

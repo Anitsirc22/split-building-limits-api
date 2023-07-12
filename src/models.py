@@ -19,18 +19,18 @@ class GeometryModel(BaseModel):
         """Validate coordinates.
 
         - Polygons do not contain donut holes (inner rings)
-        - Each coordinate pair contains exactly 2 floats
+        - Each coordinate pair contains exactly 2 or 3 floats: 3d coordinates can be provided in the input geojson but operations are only performed on 2D geometric data
 
         """
-        # For type "Polygon", the "coordinates" member must be an array of LinearRing coordinate arrays. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
-        # https://rdrr.io/cran/geoops/man/Polygon.html
         if len(coordinates) != 1:
+            # For type "Polygon", the "coordinates" member must be an array of LinearRing coordinate arrays. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
+            # https://rdrr.io/cran/geoops/man/Polygon.html
             raise InputGeometryError("Polygons cannot contain inner holes.")
         for coord in coordinates[0]:
             if (num_coord := len(coord)) not in [
                 2,
                 3,
-            ]:  # 3d coordinates are supported but are treated as 2d
+            ]:
                 raise InputGeometryError(
                     f"Coordinates provided contain {num_coord} dimensions. Only 2d or 3d geometries supported."
                 )
@@ -43,7 +43,7 @@ class FeatureModel(BaseModel):
     properties: dict
 
     class Config:
-        extra = Extra.ignore  # ignore id, bbox
+        extra = Extra.ignore  # ignore extra geojson fields (e.g. bbox, id)
 
 
 class FeatureCollectionModel(BaseModel):
@@ -51,7 +51,7 @@ class FeatureCollectionModel(BaseModel):
     features: list[FeatureModel]
 
     class Config:
-        extra = Extra.ignore  # ignore bbox
+        extra = Extra.ignore  # ignore extra geojson fields (e.g. bbox)
 
 
 class InputModel(BaseModel):
@@ -80,8 +80,6 @@ class InputModel(BaseModel):
 
 class OutputModel(BaseModel):
     id: int
-    # building_limits: FeatureCollectionModel
-    # height_plateaus: FeatureCollectionModel
     split_building_limits: FeatureCollectionModel
 
     @validator("split_building_limits")

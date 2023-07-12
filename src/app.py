@@ -71,14 +71,15 @@ async def split_building_limits(
     ),
     input_data: InputModel = Body(),
 ) -> OutputModel:
-    """
-    Split building limits according to height plateaus.
+    """Split building limits according to height plateaus.
+
     - building_limits: The areas (polygons) on your site where you are allowed to build. Expected format: GeoJSON with type FeatureCollection.
     - height_plateaus: Areas (polygons) on your site with different elevation. Expected format: GeoJSON with type FeatureCollection.
 
-    """
-    # add response model with the errors
+    The split building polygons are persisted in a database.
 
+    Returns the id and the split building limits in GeoJSON format.
+    """
     return await split_and_persist_building_limits_unsafe(input_data, gcs, pcs)
 
 

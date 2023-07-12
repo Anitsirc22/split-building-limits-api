@@ -2,18 +2,6 @@ import json
 
 import pytest
 
-from fastapi.testclient import TestClient
-
-from src.app import app
-
-
-@pytest.fixture
-def fast_api_test_client():
-    """Create a tess client."""
-    client = TestClient(app)
-
-    return client
-
 
 @pytest.fixture
 def plateaus_covering_building_limit():
@@ -33,7 +21,7 @@ def vaterlandsparken_input():
 
 @pytest.fixture
 def plateaus_covering_multiple_buildings_limits():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for plateaus covering multiple building limits."""
     with open(
         "tests/input_files/plateaus_covering_multiple_building_limits.json"
     ) as input_file:
@@ -43,7 +31,7 @@ def plateaus_covering_multiple_buildings_limits():
 
 @pytest.fixture
 def plateaus_not_fully_covering_building_limits():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for plateaus not fully covering building limits."""
     with open(
         "tests/input_files/plateaus_not_fully_covering_building_limits_error.json"
     ) as input_file:
@@ -53,7 +41,7 @@ def plateaus_not_fully_covering_building_limits():
 
 @pytest.fixture
 def plateaus_with_holes():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for plateaus with inner holes."""
     with open("tests/input_files/plateaus_with_holes_error.json") as input_file:
         input_json = json.load(input_file)
     return input_json
@@ -61,7 +49,7 @@ def plateaus_with_holes():
 
 @pytest.fixture
 def building_limit_with_holes():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for a building limit with inner holes."""
     with open("tests/input_files/building_limit_with_holes_error.json") as input_file:
         input_json = json.load(input_file)
     return input_json
@@ -69,7 +57,7 @@ def building_limit_with_holes():
 
 @pytest.fixture
 def plateaus_without_elevation_data():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for plateaus without elevation data."""
     with open(
         "tests/input_files/plateaus_without_elevation_data_error.json"
     ) as input_file:
@@ -79,7 +67,7 @@ def plateaus_without_elevation_data():
 
 @pytest.fixture
 def building_limit_plateaus_coordinates_format_error():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for building limits and plateaus with invalid coordinate format."""
     with open(
         "tests/input_files/building_limit_plateaus_coordinates_format_error.json"
     ) as input_file:
@@ -89,7 +77,7 @@ def building_limit_plateaus_coordinates_format_error():
 
 @pytest.fixture
 def overlapping_building_limits():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for overlapping building limits."""
     with open("tests/input_files/overlapping_building_limits_error.json") as input_file:
         input_json = json.load(input_file)
     return input_json
@@ -97,7 +85,7 @@ def overlapping_building_limits():
 
 @pytest.fixture
 def overlapping_height_plateaus():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for overlapping height plateaus."""
     with open("tests/input_files/overlapping_height_plateaus_error.json") as input_file:
         input_json = json.load(input_file)
     return input_json
@@ -105,7 +93,7 @@ def overlapping_height_plateaus():
 
 @pytest.fixture
 def building_limit_plateaus_format_error():
-    """Get data for plateaus covering multiple building limit."""
+    """Get data for a building limit and plateaus with invalid format."""
     with open(
         "tests/input_files/building_limit_plateaus_format_error.json"
     ) as input_file:
