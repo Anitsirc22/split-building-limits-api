@@ -6,7 +6,7 @@ from typing import Optional
 
 import uvicorn
 
-from fastapi import Body, FastAPI, Path, Query
+from fastapi import Body, FastAPI, Path, Query, status
 
 from src.error_handlers import (
     input_geometry_error_handler,
@@ -83,7 +83,12 @@ async def split_building_limits(
     return await split_and_persist_building_limits_unsafe(input_data, gcs, pcs)
 
 
-@app.get("/{id}", responses={404: {"model": ErrorMessageModel}})
+@app.get("/health", status_code=status.HTTP_200_OK)
+async def health() -> str:
+    return "ok"
+
+
+@app.get("/getbyid/{id}", responses={404: {"model": ErrorMessageModel}})
 async def get_building_limits_by_id(
     id: int = Path(..., description="The id of the building limits.")
 ) -> OutputModel:

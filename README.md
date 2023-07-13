@@ -4,18 +4,14 @@ API that consumes building limits and height plateaus, splits up the building li
 according to the height plateaus, and stores these three entities (building limits,
 height plateaus and split building limits) in a persistent way.
 
-The API is deployed at:
+The API is deployed at: <https://api-split-building-limits.onrender.com/>
 The postgres database instance is deployed at: <https://www.elephantsql.com/>.
 
 ## API Spec
 
+<https://api-split-building-limits.onrender.com/docs>
+
 ## Local development
-
-### Setup
-
-Copy the `.envrc.template` to `.envrc`, and run `direnv allow` or source
-the `.envrc` file manually. It should contain the database url `DB_URL`
-of a deployed or local database.
 
 ### Running the service
 
@@ -25,9 +21,14 @@ of a deployed or local database.
 docker compose up
 ```
 
+This will spin up a postgres local data base container.
+
 #### Locally
 
 A local or deployed database instance is needed to run the application.
+Copy the `.envrc.template` to `.envrc`, and run `direnv allow` or source
+the `.envrc` file manually. It should contain the database url `DB_URL`
+of a deployed or local database.
 
 ```shell
 poetry install
