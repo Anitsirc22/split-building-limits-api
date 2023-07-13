@@ -5,6 +5,7 @@ according to the height plateaus, and stores these three entities (building limi
 height plateaus and split building limits) in a persistent way.
 
 The API is deployed at: <https://api-split-building-limits.onrender.com/>
+
 The postgres database instance is deployed at: <https://www.elephantsql.com/>.
 
 ## API Spec
@@ -70,6 +71,6 @@ notebook`.
 
 - Height plateaus should fully cover building limits. Otherwise a 400
   (BAD REQUEST) is sent to the client.
-- Neither height plateaus or building limits can not contain
-  overlapping geometries. Otherwise a 400 (BAD REQUEST) is sent to
+- Neither height plateaus or building limits can contain
+  overlapping geometries or inner holes. Otherwise a 400 (BAD REQUEST) is sent to
   the client.

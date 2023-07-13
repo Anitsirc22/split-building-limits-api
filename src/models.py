@@ -19,11 +19,16 @@ class GeometryModel(BaseModel):
         """Validate coordinates.
 
         - Polygons do not contain donut holes (inner rings)
-        - Each coordinate pair contains exactly 2 or 3 floats: 3d coordinates can be provided in the input geojson but operations are only performed on 2D geometric data
+        - Each coordinate pair contains exactly 2 or 3 floats: 3d
+          coordinates can be provided in the input geojson but
+          operations are only performed on 2D geometric data
 
         """
         if len(coordinates) != 1:
-            # For type "Polygon", the "coordinates" member must be an array of LinearRing coordinate arrays. For Polygons with multiple rings, the first must be the exterior ring and any others must be interior rings or holes.
+            # For type "Polygon", the "coordinates" member must be an
+            # array of LinearRing coordinate arrays. For Polygons with
+            # multiple rings, the first must be the exterior ring and
+            # any others must be interior rings or holes.
             # https://rdrr.io/cran/geoops/man/Polygon.html
             raise InputGeometryError("Polygons cannot contain inner holes.")
         for coord in coordinates[0]:

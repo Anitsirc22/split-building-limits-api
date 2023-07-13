@@ -62,9 +62,7 @@ async def split_and_persist_building_limits_unsafe(
         building_limits_split_gdf = height_plateaus_gdf.overlay(
             building_limits_gdf, how="intersection"
         )
-        building_limits_split_json = (
-            building_limits_split_gdf.to_json()
-        )  # to_json returns string, json.loads converts to dict
+        building_limits_split_json = building_limits_split_gdf.to_json()
 
         building_limits_split_dict = json.loads(building_limits_split_json)
 

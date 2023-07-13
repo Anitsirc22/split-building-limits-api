@@ -4,9 +4,9 @@ services:
     image: postgres:13
     restart: always
     environment:
-      POSTGRES_USER: your_username
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: your_database_name
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database_name
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     environment:
-      DB_URL: postgresql://your_username:your_password@db:5432/your_database_name
+      DB_URL: postgresql://username:password@db:5432/database_name
 
 volumes:
   postgres_data:

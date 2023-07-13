@@ -27,11 +27,9 @@ def validate_not_overlapping_polygons(gdf: gpd.GeoDataFrame, pcs: Optional[str] 
 
     polygons_geoseries = gpd.GeoSeries(gdf.geometry)
     polygons_area = sum(polygons_geoseries.area)
-    logger.info(polygons_area)
 
     polygons_union = polygons_geoseries.unary_union
     polygons_union_area = polygons_union.area
-    logger.info(polygons_union_area)
 
     if abs(polygons_area - polygons_union_area) > 1e-6:
         logger.error("Input polygons overlap.")

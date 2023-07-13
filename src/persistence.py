@@ -69,7 +69,6 @@ async def write_split_building_limits_to_database(
         logger.info(
             f"Split building limits written to database, row id is {row_id[0]}."
         )
-    # return json.loads(split_building_limits_str)
     return row_id[0]
 
 
@@ -92,7 +91,7 @@ async def get_existing_split_building_limits(
         return None
 
 
-def get_number_of_rows():  # sync -> only used in tests
+def get_number_of_rows():  # sync -> as it is only used in (sync) tests
     """Get number of rows in database."""
     with psycopg.Connection.connect(url) as connection:
         with connection.cursor() as cursor:

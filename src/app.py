@@ -26,13 +26,17 @@ from src.persistence import delete_all_rows, delete_by_id, get_by_id
 logging.basicConfig(level=logging.INFO)
 
 description = """
-The **Split Building Limits API** consumes building limits and height plateaus, splits up the building limits according to the height plateaus, and stores these three entities (building limits, height plateaus and split building limits) in a
-in a Postgres database.
+The **Split Building Limits API** consumes building limits and height
+plateaus, splits up the building limits according to the height
+plateaus, and stores these three entities (building limits, height
+plateaus and split building limits) in a Postgres database.
 
 """
 input_data_description = """
-building_limits: The areas (polygons) on your site where you are allowed to build. \nExpected format: GeoJSON with type FeatureCollection.
-height_plateaus: Areas (polygons) on your site with different elevation. \nExpected format: GeoJSON with type FeatureCollection.
+building_limits: The areas (polygons) on your site where you are allowed
+to build. \nExpected format: GeoJSON with type FeatureCollection.
+height_plateaus: Areas (polygons) on your site with different elevation.
+\nExpected format: GeoJSON with type FeatureCollection.
 """
 app = FastAPI(title="Split building limits API", description=description)
 
@@ -41,8 +45,9 @@ app = FastAPI(title="Split building limits API", description=description)
 async def add_process_time_header(request, call_next):
     """Add request process time in the response header.
 
-    A middleware is a function that works with every request before it is processed by any specific
-    path operation and also with every response before returning it.
+    A middleware is a function that works with every request before it
+    is processed by any specific path operation and also with every
+    response before returning it.
 
     """
     start_time = time.time()
@@ -73,8 +78,10 @@ async def split_building_limits(
 ) -> OutputModel:
     """Split building limits according to height plateaus.
 
-    - building_limits: The areas (polygons) on your site where you are allowed to build. Expected format: GeoJSON with type FeatureCollection.
-    - height_plateaus: Areas (polygons) on your site with different elevation. Expected format: GeoJSON with type FeatureCollection.
+    - building_limits: The areas (polygons) on your site where you are allowed to build.
+      Expected format: GeoJSON with type FeatureCollection.
+    - height_plateaus: Areas (polygons) on your site with different elevation. Expected
+      format: GeoJSON with type FeatureCollection.
 
     The split building polygons are persisted in a database.
 
