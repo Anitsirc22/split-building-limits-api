@@ -7,7 +7,7 @@ from typing import Optional
 import uvicorn
 
 from fastapi import Body, FastAPI, Path, Query, status
-
+import os
 from src.error_handlers import (
     input_geometry_error_handler,
     input_value_error_handler,
@@ -22,6 +22,8 @@ from src.handlers import split_and_persist_building_limits_unsafe
 from src.models import ErrorMessageModel, InputModel, OutputModel
 from src.persistence import delete_all_rows, delete_by_id, get_by_id
 
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+import uptrace
 
 logging.basicConfig(level=logging.INFO)
 
@@ -39,6 +41,16 @@ height_plateaus: Areas (polygons) on your site with different elevation.
 \nExpected format: GeoJSON with type FeatureCollection.
 """
 app = FastAPI(title="Split building limits API", description=description)
+
+# don't use telemetry for local testing
+if uptrace_dsn := os.environ.get("UPTRACE_DSN"):
+    uptrace.configure_opentelemetry(
+        dsn=uptrace_dsn,
+        service_name="Split-building-limits-api",
+        service_version="0.1.0",
+    )
+
+    FastAPIInstrumentor.instrument_app(app, excluded_urls="/health,/docs,/openapi.json")
 
 
 @app.middleware("http")

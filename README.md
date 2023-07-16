@@ -74,3 +74,9 @@ notebook`.
 - Neither height plateaus or building limits can contain
   overlapping geometries or inner holes. Otherwise a 400 (BAD REQUEST) is sent to
   the client.
+
+## Telemetry
+
+Tracing, metrics and logs for the deployed version are monitored in `Uptrace`: <https://app.uptrace.dev/>
+
+Uptrace documentation: <https://uptrace.dev/get/instrument/opentelemetry-fastapi.html#what-is-opentelemetry>
