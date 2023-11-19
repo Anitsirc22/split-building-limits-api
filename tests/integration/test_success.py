@@ -125,7 +125,7 @@ def test_get_by_id(fast_api_test_client, plateaus_covering_building_limit):
 
         row_id = response_json["id"]
 
-        response_get = fast_api_test_client.get(f"/{row_id}")
+        response_get = fast_api_test_client.get(f"/getbyid/{row_id}")
 
         assert response_get.status_code == 200
         assert response_json["split_building_limits"] == response_get.json()["split_building_limits"]
