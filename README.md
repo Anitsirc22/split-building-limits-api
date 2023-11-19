@@ -40,7 +40,7 @@ The API docs can be accessed at: <http://127.0.0.1:4011/docs>
 
 ## Local testing
 
-Tests are using flask api test client, so there is no need to run the
+Tests are using fast api test client, so there is no need to run the
 service.
 
 Make sure you have the `DB_URL` environment variable set.

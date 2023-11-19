@@ -22,8 +22,9 @@ def validate_not_overlapping_polygons(gdf: gpd.GeoDataFrame, pcs: Optional[str] 
         InputGeometryError: If polygons overlap.
 
     """
-    if pcs:
-        gdf = gdf.to_crs(pcs)
+    gdf_ = gdf.to_crs(pcs) if pcs else gdf
+    assert isinstance(gdf_, gpd.GeoDataFrame)
+    gdf = gdf_
 
     polygons_geoseries = gpd.GeoSeries(gdf.geometry)
     polygons_area = sum(polygons_geoseries.area)
@@ -48,10 +49,8 @@ def validate_plateaus_fully_cover_building_limits(
     Raises:
         InputGeometryError: If height plateaus do not fully cover the building limits.
     """
-    plateaus_fully_cover_building_limits = gdf_plateaus.unary_union.buffer(
-        1e-6
-    ).contains(gdf_building_limits.unary_union)
+    plateaus_fully_cover_building_limits = gdf_plateaus.unary_union.buffer(1e-6).contains(
+        gdf_building_limits.unary_union
+    )
     if not plateaus_fully_cover_building_limits:
-        raise InputGeometryError(
-            "Please provide height plateaus that fully cover the building limits."
-        )
+        raise InputGeometryError("Please provide height plateaus that fully cover the building limits.")

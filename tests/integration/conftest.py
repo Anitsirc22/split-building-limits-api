@@ -1,3 +1,4 @@
+import httpx
 import pytest
 
 from fastapi.testclient import TestClient
@@ -11,7 +12,7 @@ class PostClient:
         Deletes row created by the test after the test is finished.
         """
         self.client = client
-        self.result = None
+        self.result: httpx.Response
         self.args = args
         self.kwargs = kwargs
 

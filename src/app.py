@@ -71,9 +71,7 @@ async def add_process_time_header(request, call_next):
 
 app.add_exception_handler(InputGeometryError, input_geometry_error_handler)
 app.add_exception_handler(InputValueError, input_value_error_handler)
-app.add_exception_handler(
-    SplitBuildingLimitsNotFoundError, split_building_limits_not_found_handler
-)
+app.add_exception_handler(SplitBuildingLimitsNotFoundError, split_building_limits_not_found_handler)
 
 
 @app.post("/split", responses={400: {"model": ErrorMessageModel}})
@@ -99,6 +97,8 @@ async def split_building_limits(
 
     Returns the id and the split building limits in GeoJSON format.
     """
+    assert gcs
+    assert pcs
     return await split_and_persist_building_limits_unsafe(input_data, gcs, pcs)
 
 
@@ -108,11 +108,10 @@ async def health() -> str:
 
 
 @app.get("/getbyid/{id}", responses={404: {"model": ErrorMessageModel}})
-async def get_building_limits_by_id(
-    id: int = Path(..., description="The id of the building limits.")
-) -> OutputModel:
+async def get_building_limits_by_id(id: int = Path(..., description="The id of the building limits.")) -> OutputModel:
     """Get building limits by id."""
     existing_split_building_limits = await get_by_id(id)
+    assert existing_split_building_limits
     return OutputModel(
         id=existing_split_building_limits[0],
         split_building_limits=json.loads(existing_split_building_limits[1]),
@@ -126,9 +125,7 @@ async def delete_all_building_limits():
 
 
 @app.delete("/delete/{id}", responses={404: {"model": ErrorMessageModel}})
-async def delete_building_limits_by_id(
-    id: int = Path(..., description="The id of the building limits.")
-):
+async def delete_building_limits_by_id(id: int = Path(..., description="The id of the building limits.")):
     """Get building limits by id."""
     return await delete_by_id(id)
 

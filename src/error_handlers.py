@@ -15,9 +15,7 @@ from src.exceptions import (
 logger = logging.getLogger(__name__)
 
 
-async def input_geometry_error_handler(
-    _: Request, exc: InputGeometryError
-) -> JSONResponse:
+async def input_geometry_error_handler(_: Request, exc: InputGeometryError) -> JSONResponse:
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"message": f"{exc!s}"},
@@ -31,9 +29,7 @@ async def input_value_error_handler(_: Request, exc: InputValueError) -> JSONRes
     )
 
 
-async def split_building_limits_not_found_handler(
-    _: Request, exc: SplitBuildingLimitsNotFoundError
-) -> JSONResponse:
+async def split_building_limits_not_found_handler(_: Request, exc: SplitBuildingLimitsNotFoundError) -> JSONResponse:
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,
         content={"message": f"{exc!s}"},
@@ -49,7 +45,5 @@ async def catchall_exceptions_middleware(
         logger.exception(f"Something went wrong. error={e}")
         return JSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            content={
-                "message": "Something went wrong."
-            },  # don't show the error to the user
+            content={"message": "Something went wrong."},  # don't show the error to the user
         )

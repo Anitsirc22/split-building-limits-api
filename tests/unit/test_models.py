@@ -50,9 +50,7 @@ def test_input_model(plateaus_covering_building_limit):
 
 
 @pytest.mark.unit
-@pytest.mark.parametrize(
-    "input_data", ["plateaus_with_holes", "building_limit_with_holes"]
-)
+@pytest.mark.parametrize("input_data", ["plateaus_with_holes", "building_limit_with_holes"])
 def test_input_model_contains_inner_holes_error(input_data, request):
     input_data_ = request.getfixturevalue(input_data)
     with pytest.raises(InputGeometryError) as excinfo:

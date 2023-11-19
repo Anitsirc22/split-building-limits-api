@@ -1,13 +1,9 @@
 from typing import Literal
-
 import geopandas as gpd
 
-from pydantic import BaseModel, Extra, StrictInt, confloat, validator
+from pydantic import BaseModel, Extra, StrictInt, validator, StrictFloat
 
 from src.exceptions import InputGeometryError, InputValueError
-
-
-StrictFloat = confloat(strict=True, gt=float("-inf"), lt=float("inf"))
 
 
 class GeometryModel(BaseModel):
@@ -64,12 +60,8 @@ class InputModel(BaseModel):
     height_plateaus: FeatureCollectionModel
 
     def to_geodataframes(self, gcs):
-        building_limits_gdf = gpd.GeoDataFrame.from_features(
-            self.building_limits.dict(), crs=gcs
-        )
-        height_plateaus_gdf = gpd.GeoDataFrame.from_features(
-            self.height_plateaus.dict(), crs=gcs
-        )
+        building_limits_gdf = gpd.GeoDataFrame.from_features(self.building_limits.dict(), crs=gcs)
+        height_plateaus_gdf = gpd.GeoDataFrame.from_features(self.height_plateaus.dict(), crs=gcs)
         return building_limits_gdf, height_plateaus_gdf
 
     @validator("height_plateaus")
@@ -77,9 +69,7 @@ class InputModel(BaseModel):
         """Validate that height plateaus contain elevation information."""
         for feature in height_plateaus.features:
             if not feature.properties:
-                raise InputValueError(
-                    "Height plateaus should contain elevation information."
-                )
+                raise InputValueError("Height plateaus should contain elevation information.")
         return height_plateaus
 
 
@@ -92,9 +82,7 @@ class OutputModel(BaseModel):
         """Validate that split building limits contain elevation information."""
         for feature in split_building_limits.features:
             if not feature.properties:
-                raise ValueError(
-                    "The split building limits should contain elevation information."
-                )
+                raise ValueError("The split building limits should contain elevation information.")
         return split_building_limits
 
 
