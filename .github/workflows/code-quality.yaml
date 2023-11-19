@@ -14,6 +14,9 @@ jobs:
         python-version: ["3.10"]
     runs-on: ${{ matrix.platform }}
 
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -35,33 +38,6 @@ jobs:
       - name: Code checks
         run: |
           poetry run pre-commit run --all-files --show-diff-on-failure
-
-  tests:
-    name: Tests
-    strategy:
-        matrix:
-            platform: [ubuntu-latest, macos-latest, windows-latest]
-            python-version: ["3.10", "3.11",]
-    runs-on: ${{ matrix.platform }}
-    env:
-      DB_URL: ${{ secrets.DB_URL }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install poetry
-        run: |
-          pipx install poetry
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'poetry'
-          # setup-python uses by default poetry.lock hash as part of the cache key.
-
-      - name: Install dependencies
-        run: |
-          poetry install
 
       - name: Run Core Tests
         run: poetry run pytest
