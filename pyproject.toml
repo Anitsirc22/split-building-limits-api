@@ -26,6 +26,7 @@ requests = "^2.31.0"
 pre-commit = "^3.3.3"
 shapely = "^2.0.1"
 black = "^23.7.0"
+pyright = "^1.1.336"
 
 [build-system]
 requires = ["poetry-core"]
@@ -49,7 +50,7 @@ line-length = 120
 # UP007:  Use `X | Y` for type annotations
 # I001: Import block is un-sorted or un-formatted, conflicting with black
 ignore = ["E501", "E731", "W605","D100", "D101", "D102", "D103", "D104", "D105", "D106", "RUF002", "UP006", "UP007", "UP035", "I001"]
-target-version = "py38"
+target-version = "py310"
 select = ["E", "W",  "F", "I", "T", "RUF", "TID", "UP"]
 exclude = []
 
@@ -60,3 +61,25 @@ lines-after-imports = 2
 lines-between-types = 1
 split-on-trailing-comma = false
 known-third-party = ["pytest"]
+
+[tool.pyright]
+reportMissingModuleSource = false
+reportMissingTypeStubs = false
+reportMissingImports = false
+reportUnnecessaryTypeIgnoreComment = true
+reportUnusedImport = true
+reportUnusedVariable = true
+reportUnnecessaryIsInstance = true
+reportUnnecessaryComparison = true
+reportUnnecessaryCast = true
+reportPrivateUsage = true
+reportImportCycles = true
+reportDuplicateImport = true
+reportConstantRedefinition = true
+reportOverlappingOverload = true
+reportInconsistentConstructor = true
+reportImplicitStringConcatenation = true
+pythonVersion = "3.10"
+typeCheckingMode = "basic"
+include = ["src", "test"]
+venv = ".venv"

@@ -1,5 +1,6 @@
 import json
 import logging
+import geopandas as gpd
 
 from src.helpers import (
     validate_not_overlapping_polygons,
@@ -18,9 +19,7 @@ from src.models import InputModel
 logger = logging.getLogger(__name__)
 
 
-async def split_and_persist_building_limits_unsafe(
-    input_data: InputModel, gcs: str, pcs: str
-):
+async def split_and_persist_building_limits_unsafe(input_data: InputModel, gcs: str | None, pcs: str | None):
     """
     Split building limits and persist them to database.
 
@@ -55,13 +54,10 @@ async def split_and_persist_building_limits_unsafe(
         building_limits_gdf, height_plateaus_gdf = input_data.to_geodataframes(gcs=gcs)
         validate_not_overlapping_polygons(building_limits_gdf, pcs=pcs)
         validate_not_overlapping_polygons(height_plateaus_gdf, pcs=pcs)
-        validate_plateaus_fully_cover_building_limits(
-            height_plateaus_gdf, building_limits_gdf
-        )
+        validate_plateaus_fully_cover_building_limits(height_plateaus_gdf, building_limits_gdf)
 
-        building_limits_split_gdf = height_plateaus_gdf.overlay(
-            building_limits_gdf, how="intersection"
-        )
+        building_limits_split_gdf = height_plateaus_gdf.overlay(building_limits_gdf, how="intersection")
+        assert isinstance(building_limits_split_gdf, gpd.GeoDataFrame)
         building_limits_split_json = building_limits_split_gdf.to_json()
 
         building_limits_split_dict = json.loads(building_limits_split_json)

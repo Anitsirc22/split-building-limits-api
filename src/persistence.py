@@ -43,7 +43,7 @@ DELETE_BY_ID_QUERY = """
     DELETE FROM split_building_limits WHERE id = %s;
 """
 
-url = os.environ.get("DB_URL")
+url = os.environ["DB_URL"]
 
 
 def get_connection() -> Awaitable[psycopg.AsyncConnection]:
@@ -65,10 +65,10 @@ async def write_split_building_limits_to_database(
             (building_limits_str, height_plateaus_str, split_building_limits_str),
         )
         row_id = await cursor.fetchone()
+        assert row_id
 
-        logger.info(
-            f"Split building limits written to database, row id is {row_id[0]}."
-        )
+        logger.info(f"Split building limits written to database, row id is {row_id[0]}.")
+
     return row_id[0]
 
 
@@ -80,9 +80,7 @@ async def get_existing_split_building_limits(
     """Get split building limits from database."""
     try:
         async with async_connection.cursor() as cursor:
-            await cursor.execute(
-                SELECT_ROW_QUERY_BY_GEOMETRY, (building_limits_str, height_plateaus_str)
-            )
+            await cursor.execute(SELECT_ROW_QUERY_BY_GEOMETRY, (building_limits_str, height_plateaus_str))
             row = await cursor.fetchone()
             logger.info("Split building limits retrieved from database.")
         return row[0] if row else None
@@ -113,18 +111,14 @@ async def delete_by_id(id: int):
     """Delete a row by id from the data base."""
     async with await psycopg.AsyncConnection.connect(url) as async_connection:
         async with async_connection.cursor() as cursor:
-            await cursor.execute(
-                SELECT_ROW_BY_ID_QUERY, (id,)
-            )  # check if the row exists
+            await cursor.execute(SELECT_ROW_BY_ID_QUERY, (id,))  # check if the row exists
             row = await cursor.fetchone()
             if row:
                 await cursor.execute(DELETE_BY_ID_QUERY, (id,))
                 logger.info(f"Row with id {id} deleted from the database.")
                 return {"message": f"Row with id {id} deleted from the database."}
             else:
-                raise SplitBuildingLimitsNotFoundError(
-                    f"Split building limits with id {id} not found."
-                )
+                raise SplitBuildingLimitsNotFoundError(f"Split building limits with id {id} not found.")
 
 
 async def get_by_id(id: int) -> tuple | None:
@@ -137,6 +131,4 @@ async def get_by_id(id: int) -> tuple | None:
                 logger.info(f"Get by id: {id}.")
                 return row[0]
             else:
-                raise SplitBuildingLimitsNotFoundError(
-                    f"Split building limits with id {id} not found."
-                )
+                raise SplitBuildingLimitsNotFoundError(f"Split building limits with id {id} not found.")

@@ -49,7 +49,4 @@ def test_validate_plateaus_not_fully_cover_building_limits_error():
     with pytest.raises(InputGeometryError) as excinfo:
         validate_plateaus_fully_cover_building_limits(gdf2, gdf1)
 
-    assert (
-        "Please provide height plateaus that fully cover the building limits."
-        == str(excinfo.value)
-    )
+    assert "Please provide height plateaus that fully cover the building limits." == str(excinfo.value)
