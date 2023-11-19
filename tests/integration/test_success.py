@@ -144,4 +144,4 @@ def test_delete_by_id(fast_api_test_client, plateaus_covering_building_limit):
         response_get = fast_api_test_client.get(f"/{row_id}")
 
         assert response_get.status_code == 404
-        assert "not found" in response_get.json()["message"]
+        assert "Not Found" in response_get.json()["detail"]
