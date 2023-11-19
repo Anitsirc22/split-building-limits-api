@@ -97,8 +97,7 @@ async def split_building_limits(
 
     Returns the id and the split building limits in GeoJSON format.
     """
-    assert gcs
-    assert pcs
+
     return await split_and_persist_building_limits_unsafe(input_data, gcs, pcs)
 
 

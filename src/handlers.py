@@ -19,7 +19,7 @@ from src.models import InputModel
 logger = logging.getLogger(__name__)
 
 
-async def split_and_persist_building_limits_unsafe(input_data: InputModel, gcs: str, pcs: str):
+async def split_and_persist_building_limits_unsafe(input_data: InputModel, gcs: str | None, pcs: str | None):
     """
     Split building limits and persist them to database.
 
